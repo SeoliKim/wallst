@@ -32,6 +32,8 @@ export default function Home() {
         {/* Search Box */}
         <TextField label="Search" variant="outlined" fullWidth />
 
+        <button onClick={() => time_series_monthly("IBM")}>Button</button>
+
         {/* Pie Chart */}
         <Paper elevation={3} sx={{ padding: 2 }}>
           <ProfolioPie data={pieChartData} />
