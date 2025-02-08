@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Box, TextField, Typography } from '@mui/material';
-import { PieChart, LineChart } from '@mui/x-charts';
+import { Box, TextField, Typography, Paper } from '@mui/material';
+import ProfolioPie from '../components/profolioPie';
+import ReturnChart from '../components/returnChart';
 
 const pieChartData = [
   { id: 0, value: 400, label: 'Category A' },
@@ -21,7 +22,7 @@ const lineChartData = [
 
 export default function Home() {
   return (
-    <Box sx={{ display: 'flex', height: '100vh', padding: 2 }}>
+    <Box sx={{ display: 'flex', height: '100vh', padding: 2, gap: 2 }}>
       {/* Left Panel */}
       <Box sx={{ width: '30%', display: 'flex', flexDirection: 'column', gap: 2 }}>
         {/* Search Box */}
@@ -30,51 +31,31 @@ export default function Home() {
           variant="outlined"
           fullWidth
         />
-
         {/* Pie Chart */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography variant="h6" gutterBottom>
-            Distribution
-          </Typography>
-          <PieChart
-            series={[
-              {
-                data: pieChartData,
-                innerRadius: 30,
-                outerRadius: 100,
-                paddingAngle: 5,
-                cornerRadius: 5,
-              },
-            ]}
-            width={400}
-            height={200}
-          />
-        </Box>
+        <Paper elevation={3} sx={{ padding: 2 }}>
+          <ProfolioPie data={pieChartData} />
+        </Paper>
+      </Box>
 
-        {/* Line Chart */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Right Panel */}
+      <Box sx={{ width: '70%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {/* Return Chart */}
+        <Paper elevation={3} sx={{ padding: 2 }}>
+          <ReturnChart data={lineChartData} />
+        </Paper>
+
+        {/* Risk and Rating Section */}
+        <Paper elevation={3} sx={{ padding: 2, flexGrow: 1 }}>
           <Typography variant="h6" gutterBottom>
-            Return Rate Over Time
+            Risk and Rating
           </Typography>
-          <LineChart
-            xAxis={[
-              {
-                dataKey: 'month',
-                scaleType: 'point',
-              },
-            ]}
-            series={[
-              {
-                dataKey: 'returnRate',
-                label: 'Return Rate',
-                color: '#8884d8',
-              },
-            ]}
-            dataset={lineChartData}
-            width={400}
-            height={300}
-          />
-        </Box>
+          <Typography variant="body1">
+            Risk Level: Medium
+          </Typography>
+          <Typography variant="body1">
+            Rating: 4.5/5
+          </Typography>
+        </Paper>
       </Box>
     </Box>
   );
