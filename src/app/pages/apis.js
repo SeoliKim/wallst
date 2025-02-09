@@ -1,7 +1,7 @@
 // replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
 
-export async function time_series_monthly(company) {
-  var symbol = company;
+export async function time_series_monthly() {
+  var symbol = "IBM";
   var url =
     "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=" +
     symbol +

@@ -10,19 +10,9 @@ import { readCSV } from "../utils/csvReader";
 
 let lineChartData = [];
 
-export default function Dash({ csv }) {
-  const [result, setResult] = useState("");
-
-  /*
-  const csv2 = [
-    { symbol: "SPDR", amount: 0.5 },
-    { symbol: "VWO", amount: 0.2 },
-    { symbol: "10 year bonds", amount: 0.2 },
-    { symbol: "NVDA", amount: 0.05 },
-    { symbol: "AAPL", amount: 0.05 },
-    { symbol: "IBM", amount: 0.05 },
-  ];
-  */
+export default function Dash({ csv, setCSV }) {
+  console.log("csv", csv);
+  const [result, setResult] = useState(null);
 
   const monthlyInfo = async (input) => {
     lineChartData = [];
@@ -79,8 +69,7 @@ export default function Dash({ csv }) {
           display: "flex",
         }}
       >
-        <button onClick={() => monthlyInfo(csv)}>Button</button>
-        <AIButton />
+        <AIButton csv={csv} setCSV={setCSV} />
       </Box>
 
       {/* Panels Row */}
@@ -102,11 +91,10 @@ export default function Dash({ csv }) {
             padding: 2,
           }}
         >
-          {/* Pie Chart 
-            <Box sx={{ flexGrow: 1 }}>
-              <ProfolioPie data={pieChartData} />
-            </Box>
-            */}
+          {/* Pie Chart */}
+          <Box sx={{ flexGrow: 1 }}>
+            <ProfolioPie csv={csv} />
+          </Box>
 
           {/* Search Box
           <TextField label="Search" variant="outlined" fullWidth /> */}
@@ -126,9 +114,11 @@ export default function Dash({ csv }) {
           }}
         >
           {/* Return Chart */}
-          <Box sx={{ width: "100%", flexGrow: 1, marginTop: 2 }}>
-            <ReturnChart data={lineChartData} />
-          </Box>
+          {result && (
+            <Box sx={{ width: "100%", flexGrow: 1, marginTop: 2 }}>
+              <ReturnChart inputData={result} />
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

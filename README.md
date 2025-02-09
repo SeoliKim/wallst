@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# WALLST - Investment Portfolio Review
 
-## Getting Started
+# Project Overview:
+WALLEST is a personal investment portfolio review tool that provides a comprehensive analysis of your investment portfolio. WALLST uses AI to provide recommendations based on your risk tolerance, investment focus, and hold time. WALLST also provides a visual representation of your investment portfolio through pie and line charts.
 
-First, run the development server:
+## Get Started
+- Clone the repository
+- Run `npm install` to install all dependencies
+- Run `npm run dev` to start the server
+- Navigate to `http://localhost:3000/` to view the application
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Featues:
+### Landing Page
+- [Choose CSV File] Export a CSV of your investment portfolio from your account on your investment company's page (ex. Fidelity, Charles Schwab, etc.).
+- [Download CSV Template] If you'd like to manually input investment portfolio data, download the CSV template and fill out the columns, then submit this file.
+- Once a CSV file has been selected, a preview will pop up of the CSV table so you can check if you've chosen the right one.
+- [Submit] Once a CSV file has been chosen, click submit to move on to the portfolio review page.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Portfolio Review
+- Pie Chart: Visual representation of your investment portfolio
+  - Hover over each section to see the percentage of your portfolio that each investment makes up
+  - Click on a section to see the details of that investment
+- Line Chart: Visual representation of the return rate of your investment portfolio over time
+  - [Price over Time] Adjust the slider for Price over Time to see the return rate at each date
+- Fine-tune AI Recommendations based on your preferences including risk, hold time, and focus
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technologies Used:
+- Framework: Nextjs
+- Frontend: React, Material-UI, Chart.js
+- Backend: Node.js
+- AI:OpenAI GPT-3
 
-## Learn More
+## Demo
+Watch the demo video on YouTube: [WALLST Demo](https://youtu.be/jZs3sxqQ13E)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   
+### Please note, the information provided by WALLST is for informational purposes only and does not constitute financial advice. Always consult with a licensed financial professional before making investment decisions.

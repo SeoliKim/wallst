@@ -3,7 +3,12 @@ import { ScatterChart } from "@mui/x-charts/ScatterChart";
 import { Box, Slider, Typography } from "@mui/material";
 import { useState, useMemo } from "react";
 
-export default function ReturnChart({ data }) {
+export default function ReturnChart({ inputData }) {
+  const data = Object.keys(inputData).map(date => ({
+    date: date,
+    returnRate: parseFloat(inputData[date]["4. close"]) // Use the closing price as the return rate
+  }));
+
   // Parse date strings into Date objects and find the earliest and latest dates
   const { parsedData, earliestDate, latestDate } = useMemo(() => {
     if (!data || data.length === 0) {
