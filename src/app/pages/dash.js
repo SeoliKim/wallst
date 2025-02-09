@@ -46,6 +46,7 @@ export default function Dash() {
   };
 
   return (
+    
     <Box sx={{ display: "flex", height: "100vh", padding: 2 }}>
       {/* Left Panel */}
       <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 2 }}>
