@@ -5,12 +5,24 @@ import { time_series_monthly } from "./apis.js";
 import { Box, TextField, Typography, Paper } from "@mui/material";
 import ProfolioPie from "../components/profolioPie";
 import ReturnChart from "../components/returnChart";
+import AIButton from "../components/aiButton";
 
-const pieChartData = [{ id: 0, value: 0, label: "IBM" }];
+const pieChartData = [
+  { "symbol": "IBM", "price": 180 },
+  { "symbol": "AAPL", "price": 150 },
+  { "symbol": "GOOGL", "price": 2800 },
+  { "symbol": "AMZN", "price": 3400 },
+  { "symbol": "TSLA", "price": 700 },
+  { "symbol": "MSFT", "price": 300 },
+  { "symbol": "FB", "price": 350 },
+  { "symbol": "NVDA", "price": 200 },
+  { "symbol": "NFLX", "price": 600 },
+  { "symbol": "INTC", "price": 50 }
+];
 
 const lineChartData = [];
 
-export default function Home() {
+export default function Dash() {
   const [result, setResult] = useState("");
 
   const monthlyInfo = async (company) => {
@@ -37,13 +49,7 @@ export default function Home() {
     <Box sx={{ display: "flex", height: "100vh", padding: 2 }}>
       {/* Left Panel */}
       <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {/* Search Box */}
-        <TextField
-          label="Search"
-          variant="outlined"
-          fullWidth
-        />
-
+      
         <AIButton />
         {/* Pie Chart */}
         <Box sx={{ padding: 2, flexGrow: 1 }}>
