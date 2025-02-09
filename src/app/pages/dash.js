@@ -6,30 +6,57 @@ import { Box, TextField, Typography, Paper } from "@mui/material";
 import ProfolioPie from "../components/profolioPie";
 import ReturnChart from "../components/returnChart";
 
-const pieChartData = [{ id: 0, value: 0, label: "IBM" }];
-
-const lineChartData = [];
+let pieChartData = [];
+let lineChartData = [];
 
 export default function Home() {
   const [result, setResult] = useState("");
 
+  const csv = [
+    { symbol: "SPDR", amount: 0.5 },
+    { symbol: "VWO", amount: 0.2 },
+    { symbol: "10 year bonds", amount: 0.2 },
+    { symbol: "NVDA", amount: 0.05 },
+    { symbol: "AAPL", amount: 0.05 },
+    { symbol: "IBM", amount: 0.05 },
+  ];
+
   const monthlyInfo = async (company) => {
-    const response = await time_series_monthly("IBM"); // Call the function
-    //console.log(response);
-    setResult(response["Monthly Time Series"]); // Store the result in state
-    console.log(result);
-    populate(result);
+    pieChartData = [];
+    lineChartData = [];
+
+    for (var i = 0; i < company.length; i++) {
+      pieChartData.push({ id: i, value: 0, label: "" });
+    }
+
+    for (var i = 0; i < company.length; i++) {
+      const response = await time_series_monthly(company[i].symbol); // Call the function
+      setResult(response["Monthly Time Series"]); // Store the result in state
+      populate(result, company[i].symbol, company[i].amount, i);
+    }
   };
 
-  const populate = (result) => {
-    console.log(result);
+  const populate = (result, symbol, amount, i) => {
+    var j = 0;
     for (const dateSt in result) {
       const closeValue = result[dateSt]["4. close"];
-      console.log(dateSt);
-      console.log(closeValue);
-      lineChartData.push({ date: dateSt, returnRate: parseFloat(closeValue) });
-      //change 100 to actual value
-      pieChartData[0] = { id: 0, value: closeValue * 100, label: "IBM" };
+
+      if (j == 0) {
+        pieChartData[i].value = parseFloat(closeValue * amount);
+        pieChartData[i].label = symbol;
+      }
+
+      // if the dates have not yet been set, we first set dates
+      if (i == 0) {
+        lineChartData.push({
+          date: dateSt,
+          returnRate: parseFloat(closeValue * amount),
+        });
+      } else {
+        lineChartData[j].returnRate += parseFloat(closeValue * amount);
+      }
+
+      j++;
     }
   };
 
@@ -42,9 +69,7 @@ export default function Home() {
         {/* Search Box */}
         <TextField label="Search" variant="outlined" fullWidth />
 
-        <button onClick={() => monthlyInfo("IBM")}>Button</button>
-
-        {}
+        <button onClick={() => monthlyInfo(csv)}>Button</button>
 
         {/* Pie Chart */}
         <Paper elevation={3} sx={{ padding: 2 }}>
