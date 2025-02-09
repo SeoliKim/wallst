@@ -1,19 +1,19 @@
 "use client";
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { time_series_monthly } from "./apis.js";
 import { Box, TextField, Typography, Paper } from "@mui/material";
 import ProfolioPie from "../components/profolioPie";
 import ReturnChart from "../components/returnChart";
 import AIButton from "../components/aiButton";
+import { readCSV } from "../utils/csvReader";
 
-let pieChartData = [];
 let lineChartData = [];
 
-export default function Dash({ csv}) {
-  console.log(csv);
+export default function Dash({ csv }) {
   const [result, setResult] = useState("");
 
+  /*
   const csv2 = [
     { symbol: "SPDR", amount: 0.5 },
     { symbol: "VWO", amount: 0.2 },
@@ -22,36 +22,35 @@ export default function Dash({ csv}) {
     { symbol: "AAPL", amount: 0.05 },
     { symbol: "IBM", amount: 0.05 },
   ];
+  */
 
-  const monthlyInfo = async (company) => {
-    pieChartData = [];
+  const monthlyInfo = async (input) => {
     lineChartData = [];
 
-    for (var i = 0; i < company.length; i++) {
-      pieChartData.push({ id: i, value: 0, label: "" });
-    }
-
-    for (var i = 0; i < company.length; i++) {
-      const response = await time_series_monthly(company[i].symbol); // Call the function
-      setResult(response["Monthly Time Series"]); // Store the result in state
-      populate(result, company[i].symbol, company[i].amount, i);
+    for (var i = 0; i < input.length; i++) {
+      // we changed this from API calls to reading CSV files, as there's a limit of 25 api calls daily (for tests)
+      const data = await readCSV("/data/" + input[i].symbol + ".csv");
+      //const response = await time_series_monthly(company[i].symbol); // Call the function
+      populate(data, input[i].symbol, input[i].amount, i);
     }
   };
 
+  useEffect(() => {
+    console.log("useeffect");
+    monthlyInfo();
+    console.log("useEffect", csv);
+  }, [csv, setCSV]);
+
   const populate = (result, symbol, amount, i) => {
     var j = 0;
-    for (const dateSt in result) {
-      const closeValue = result[dateSt]["4. close"];
-
-      if (j == 0) {
-        pieChartData[i].value = parseFloat(closeValue * amount);
-        pieChartData[i].label = symbol;
-      }
+    for (const item in result) {
+      console.log(result[item]);
+      const closeValue = result[item].close;
 
       // if the dates have not yet been set, we first set dates
       if (i == 0) {
         lineChartData.push({
-          date: dateSt,
+          date: result[item].timestamp,
           returnRate: parseFloat(closeValue * amount),
         });
       } else {
@@ -80,9 +79,8 @@ export default function Dash({ csv}) {
           display: "flex",
         }}
       >
-        <button onClick={() => monthlyInfo(csv2)}>Button</button>
+        <button onClick={() => monthlyInfo(csv)}>Button</button>
         <AIButton />
-        
       </Box>
 
       {/* Panels Row */}
@@ -104,11 +102,11 @@ export default function Dash({ csv}) {
             padding: 2,
           }}
         >
-
-          {/* Pie Chart */}
-          <Box sx={{ flexGrow: 1 }}>
-            <ProfolioPie data={pieChartData} />
-          </Box>
+          {/* Pie Chart 
+            <Box sx={{ flexGrow: 1 }}>
+              <ProfolioPie data={pieChartData} />
+            </Box>
+            */}
 
           {/* Search Box
           <TextField label="Search" variant="outlined" fullWidth /> */}

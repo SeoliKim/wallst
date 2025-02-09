@@ -1,22 +1,26 @@
 "use client";
-import { ScatterChart } from '@mui/x-charts/ScatterChart';
+import { ScatterChart } from "@mui/x-charts/ScatterChart";
 import { Box, Slider, Typography } from "@mui/material";
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 
 export default function ReturnChart({ data }) {
   // Parse date strings into Date objects and find the earliest and latest dates
   const { parsedData, earliestDate, latestDate } = useMemo(() => {
     if (!data || data.length === 0) {
-      return { parsedData: [], earliestDate: new Date(), latestDate: new Date() };
+      return {
+        parsedData: [],
+        earliestDate: new Date(),
+        latestDate: new Date(),
+      };
     }
 
     // Parse dates and find min/max
-    const parsed = data.map(item => ({
+    const parsed = data.map((item) => ({
       x: new Date(item.date).getTime(), // Convert date string to timestamp
       y: item.returnRate,
     }));
 
-    const dates = parsed.map(item => item.x);
+    const dates = parsed.map((item) => item.x);
     const earliest = Math.min(...dates);
     const latest = Math.max(...dates);
 
@@ -41,7 +45,7 @@ export default function ReturnChart({ data }) {
     if (!Array.isArray(newValue)) {
       return;
     }
-    if(newValue[0]>newValue[1]){
+    if (newValue[0] > newValue[1]) {
       setXvalue([newValue[1], newValue[0]]);
     }
 
@@ -56,27 +60,31 @@ export default function ReturnChart({ data }) {
     } else {
       setXvalue(newValue);
     }
-    let left = parsedData.find(item => Math.abs(item.x - newValue[0]) < 1000000000)
-    let right = parsedData.find(item => Math.abs(item.x - newValue[1]) < 1000000000)
+    let left = parsedData.find(
+      (item) => Math.abs(item.x - newValue[0]) < 1000000000
+    );
+    let right = parsedData.find(
+      (item) => Math.abs(item.x - newValue[1]) < 1000000000
+    );
 
     // Find the prices corresponding to the left and right slider positions
-    setPriceleft(left?.y || priceleft)
-    setPriceright(right?.y || priceright)
-
+    setPriceleft(left?.y || priceleft);
+    setPriceright(right?.y || priceright);
   };
 
   return (
-    <Box >
+    <Box>
       <Typography variant="h5" gutterBottom>
-        Return Rate: {(((priceright - priceleft) / priceleft) * 100).toFixed(2)}%
+        Return Rate: {(((priceright - priceleft) / priceleft) * 100).toFixed(2)}
+        %
       </Typography>
       <ScatterChart
         xAxis={[
           {
-            label: 'Date',
+            label: "Date",
             min: xvalue[0],
             max: xvalue[1],
-            type: 'time',
+            type: "time",
             valueFormatter: (value) => {
               // Format the timestamp into a readable date string
               return new Date(value).toLocaleDateString();
@@ -85,7 +93,7 @@ export default function ReturnChart({ data }) {
         ]}
         yAxis={[
           {
-            label: 'Price',
+            label: "Price",
           },
         ]}
         series={[
@@ -96,7 +104,7 @@ export default function ReturnChart({ data }) {
             dataKey: "y",
             color: "#b291b5",
             valueFormatter: (v) => {
-              const x = new Date(v.x).toLocaleDateString()
+              const x = new Date(v.x).toLocaleDateString();
               return `Date ${x} Price ${v.y}`;
             },
           },
