@@ -61,6 +61,7 @@ export default function Home() {
   };
 
   return (
+    
     <Box sx={{ display: "flex", height: "100vh", padding: 2 }}>
       {/* Left Panel */}
       <Box
