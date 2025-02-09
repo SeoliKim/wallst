@@ -8,33 +8,25 @@ import ReturnChart from "../components/returnChart";
 import AIButton from "../components/aiButton";
 import { readCSV } from "../utils/csvReader";
 
-let lineChartData = [];
-
 export default function Dash({ csv, setCSV }) {
-  console.log("csv", csv);
   const [result, setResult] = useState(null);
 
   const monthlyInfo = async (input) => {
-    lineChartData = [];
+    var lineChartData = [];
 
     for (var i = 0; i < input.length; i++) {
       // we changed this from API calls to reading CSV files, as there's a limit of 25 api calls daily (for tests)
       const data = await readCSV("/data/" + input[i].symbol + ".csv");
       //const response = await time_series_monthly(company[i].symbol); // Call the function
-      populate(data, input[i].symbol, input[i].amount, i);
+      populate(lineChartData, data, input[i].symbol, input[i].amount, i);
     }
+
+    setResult(lineChartData);
   };
 
-  useEffect(() => {
-    console.log("useeffect");
-    monthlyInfo();
-    console.log("useEffect", csv);
-  }, [csv, setCSV]);
-
-  const populate = (result, symbol, amount, i) => {
+  const populate = (lineChartData, result, symbol, amount, i) => {
     var j = 0;
     for (const item in result) {
-      console.log(result[item]);
       const closeValue = result[item].close;
 
       // if the dates have not yet been set, we first set dates
@@ -50,6 +42,10 @@ export default function Dash({ csv, setCSV }) {
       j++;
     }
   };
+
+  useEffect(() => {
+    monthlyInfo(csv);
+  }, [csv, setCSV]);
 
   return (
     <Box
@@ -116,7 +112,7 @@ export default function Dash({ csv, setCSV }) {
           {/* Return Chart */}
           {result && (
             <Box sx={{ width: "100%", flexGrow: 1, marginTop: 2 }}>
-              <ReturnChart inputData={result} />
+              <ReturnChart data={result} />
             </Box>
           )}
         </Box>

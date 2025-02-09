@@ -1,11 +1,11 @@
 // replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
 
-export async function time_series_monthly() {
-  var symbol = "IBM";
+export async function time_series_monthly(company) {
+  var symbol = company;
   var url =
     "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=" +
     symbol +
-    "&apikey=demo";
+    "&apikey=PSWCPK0A8T0L6489";
   try {
     const response = await fetch(url);
     if (!response.ok) {
