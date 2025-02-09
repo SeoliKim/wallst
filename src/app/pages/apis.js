@@ -12,7 +12,12 @@ export async function time_series_monthly(company) {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
+    const jsonstr = JSON.stringify(json);
+    //console.log("jsonstr", jsonstr);
+    const jssp = JSON.parse(jsonstr);
+    //console.log(jssp["Monthly Time Series"]);
+    return jssp;
   } catch (error) {
     console.error(error.message);
   }
