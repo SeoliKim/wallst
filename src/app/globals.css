@@ -13,6 +13,10 @@
     --foreground: #ededed;
   }
 }
+nextjs-portal {
+  display: none;
+}
+
 
 html{
   font-family: var(--font-libre-bodoni), sans-serif;

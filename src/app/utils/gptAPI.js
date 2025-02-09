@@ -5,7 +5,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true   // Required to use the API in the browser
 });
 
-export const gptAPI = async (risk, interval, notes) => {
+export const gptAPI = async (csv, risk, interval, notes) => {
     // Call the OpenAI GPT API
     const gptResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -14,36 +14,30 @@ export const gptAPI = async (risk, interval, notes) => {
         { role: "user", content: 
           `Here is the investment portfolio for evaluation:
           - Asset Allocation:
-            [
-            { "symbol": "SPDR", "quantity": 0.5 },
-            { "symbol": "VWO", "quantity": 0.2 },
-            { "symbol": "10 year bonds", "quantity": 0.2 },
-            { "symbol": "NVDA", "quantity": 0.05 },
-            { "symbol": "AAPL", "quantity": 0.05 },
-          ] 
+            ${csv}
           
           Please recommend a new portfolio and provide the output in the following format:
           Output:
           [
-            { "symbol": "<asset>", "quantity": <percentage> },
-            { "symbol": "<asset>", "quantity": <percentage> }
+            { "symbol": "<asset>", "amount": <percentage> },
+            { "symbol": "<asset>", "amount": <percentage> }
           ]
 
           Ensure the following restrictions are applied:
             1. The total percentage allocation must add up to exactly 1 (100%).
             2. Adjustments should align with the stated goal of a ${interval} interval and ${risk} risk profile, including ${notes}.
-            3. Make 2 changes to the existing assets and add 3 new assets to the portfolio.
+            3. Make 2 changes to the existing assets and add 3 new assets to the portfolio, no bonds.
 
 
           Example Output:
           [
-            { "symbol": "SPDR", "quantity": 0.5 },
-            { "symbol": "VWO", "quantity": 0.2 },
-            { "symbol": "10 year bonds", "quantity": 0.1 },
-            { "symbol": "NVDA", "quantity": 0.05 },
-            { "symbol": "AAPL", "quantity": 0.05 },
-            { "symbol": "AI", "quantity": 0.05 },
-            { "symbol": "XLK", "quantity": 0.05 }
+            { "symbol": "SPDR", "amount": 0.5 },
+            { "symbol": "VWO", "amount": 0.2 },
+            { "symbol": "MSFT", "amount": 0.1 },
+            { "symbol": "NVDA", "amount": 0.05 },
+            { "symbol": "AAPL", "amount": 0.05 },
+            { "symbol": "AI", "amount": 0.05 },
+            { "symbol": "XLK", "amount": 0.05 }
           ]
             Only output the JSON string. Do not include any other text or explanation.`
         },

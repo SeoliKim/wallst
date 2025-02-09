@@ -108,7 +108,7 @@ export default function Home() {
           {/* Page 2 */}
           {!isPageOneVisible && (
             
-              <Dash csv={extractedData}/> 
+              <Dash csv={extractedData} setCSV={setExtractedData}/> 
           )}
         </Box>
 

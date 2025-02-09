@@ -1,66 +1,29 @@
 "use client";
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { time_series_monthly } from "./apis.js";
 import { Box, TextField, Typography, Paper } from "@mui/material";
 import ProfolioPie from "../components/profolioPie";
 import ReturnChart from "../components/returnChart";
 import AIButton from "../components/aiButton";
 
-let pieChartData = [];
-let lineChartData = [];
 
-export default function Dash({ csv}) {
-  console.log(csv);
-  const [result, setResult] = useState("");
+export default function Dash({ csv, setCSV }) {
+  console.log("csv", csv);
+  const [result, setResult] = useState(null);
 
-  const csv2 = [
-    { symbol: "SPDR", amount: 0.5 },
-    { symbol: "VWO", amount: 0.2 },
-    { symbol: "10 year bonds", amount: 0.2 },
-    { symbol: "NVDA", amount: 0.05 },
-    { symbol: "AAPL", amount: 0.05 },
-    { symbol: "IBM", amount: 0.05 },
-  ];
-
-  const monthlyInfo = async (company) => {
-    pieChartData = [];
-    lineChartData = [];
-
-    for (var i = 0; i < company.length; i++) {
-      pieChartData.push({ id: i, value: 0, label: "" });
-    }
-
-    for (var i = 0; i < company.length; i++) {
-      const response = await time_series_monthly(company[i].symbol); // Call the function
-      setResult(response["Monthly Time Series"]); // Store the result in state
-      populate(result, company[i].symbol, company[i].amount, i);
-    }
+  const monthlyInfo = async () => {
+    const response = await time_series_monthly(); // Call the function
+    console.log("response", response);
+    setResult(response["Monthly Time Series"]); // Store the result in state
+    console.log("result", result);
   };
 
-  const populate = (result, symbol, amount, i) => {
-    var j = 0;
-    for (const dateSt in result) {
-      const closeValue = result[dateSt]["4. close"];
-
-      if (j == 0) {
-        pieChartData[i].value = parseFloat(closeValue * amount);
-        pieChartData[i].label = symbol;
-      }
-
-      // if the dates have not yet been set, we first set dates
-      if (i == 0) {
-        lineChartData.push({
-          date: dateSt,
-          returnRate: parseFloat(closeValue * amount),
-        });
-      } else {
-        lineChartData[j].returnRate += parseFloat(closeValue * amount);
-      }
-
-      j++;
-    }
-  };
+  useEffect(() => {
+    console.log("useeffect");
+    monthlyInfo();
+    console.log("useEffect", csv);
+  }, [csv, setCSV]);
 
   return (
     <Box
@@ -80,9 +43,8 @@ export default function Dash({ csv}) {
           display: "flex",
         }}
       >
-        <button onClick={() => monthlyInfo(csv2)}>Button</button>
-        <AIButton />
-        
+        <AIButton csv={csv} setCSV={setCSV}/>
+
       </Box>
 
       {/* Panels Row */}
@@ -107,7 +69,7 @@ export default function Dash({ csv}) {
 
           {/* Pie Chart */}
           <Box sx={{ flexGrow: 1 }}>
-            <ProfolioPie data={pieChartData} />
+            <ProfolioPie csv={csv}/>
           </Box>
 
           {/* Search Box
@@ -128,9 +90,12 @@ export default function Dash({ csv}) {
           }}
         >
           {/* Return Chart */}
-          <Box sx={{ width: "100%", flexGrow: 1, marginTop: 2 }}>
-            <ReturnChart data={lineChartData} />
+          {result && (
+            <Box sx={{ width: "100%", flexGrow: 1, marginTop: 2 }}>
+            <ReturnChart inputData={result} />
           </Box>
+          )}
+          
         </Box>
       </Box>
     </Box>

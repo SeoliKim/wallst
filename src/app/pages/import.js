@@ -41,17 +41,24 @@ const CSVImport = ({ file, setFile , setExtractedData}) => {
     
           // Iterate over the row and apply the mapping to normalize headers
           Object.keys(row).forEach((key) => {
+            console.log(key);
             const normalizedKey = columnMapping[key] || key; // If no mapping found, use the key as it is
             normalizedRow[normalizedKey] = row[key]; // Assign the value under the normalized column name
+            console.log(normalizedRow.Symbol);
+            console.log(normalizedRow.Quantity);
+
           });
     
-          if (normalizedRow.Symbol && normalizedRow.Quantity) {
+          if (normalizedRow.Symbol != undefined && normalizedRow.Quantity != undefined) {
               return {
               symbol: normalizedRow.Symbol, // Extract the "Symbol" column
               amount: normalizedRow.Quantity, // Extract the "Quantity" column (normalized)
               };
           }
-        });
+          else {
+            return null;
+          }
+        }).filter(row => row !== null);
       
       setExtractedData(newSpecificData); // Store the specific data in state
   
@@ -88,7 +95,7 @@ const CSVImport = ({ file, setFile , setExtractedData}) => {
     const headers = Object.keys(csvData[0]);
 
     return (
-      <TableContainer component={Paper} sx={{ marginTop: 4 }}>
+      <TableContainer component={Paper} sx={{ marginTop: 4, maxHeight: '300px' }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -116,7 +123,7 @@ const CSVImport = ({ file, setFile , setExtractedData}) => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ marginTop: 5 }}>
+    <Container maxWidth="md" sx={{ marginTop: 5, maxHeight: '500px' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
           <Typography variant="h5" gutterBottom sx={{paddingTop: 1}}>
             Import Your Investment Portfolio as a CSV:

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import {
   Box,
   Button,
@@ -17,11 +17,11 @@ import Paper from '@mui/material/Paper';
 
 const pallete = ['#f2ce8b', '#e5c697', '#d9bea2', '#cbb7ac', '#bcb0b7', '#aca8c1', '#9ba1cb', '#879ad4', '#6f94de']
 
-export default function AIButton() {
+export default function AIButton({ csv, setCSV }) {
   // State for form inputs
   const [risk, setRisk] = useState('moderate');
   const [interval, setInterval] = useState('5');
-  const [focus, setFocus] = useState('popular trend');
+  const [focus, setFocus] = useState('Popular trend');
 
   // State for API call
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ export default function AIButton() {
       const parsedInterval = parseInt(interval, 10);
 
       // Call the API (replace `gptAPI` with your actual API call)
-      const result = await gptAPI(risk, parsedInterval, focus);
+      const result = await gptAPI(csv, risk, parsedInterval, focus);
       console.log(result);
 
       // Find the index of the first '[' and the last ']'
@@ -60,6 +60,12 @@ export default function AIButton() {
       setLoading(false);
     }
   };
+
+  const handleApply = () => {
+    // Update the CSV data with the new recommendation
+    setCSV(response);
+    setResponse(null);
+  }
 
   const handleCancel = () => {
     setResponse(null);
@@ -146,7 +152,7 @@ export default function AIButton() {
               {
                 data: response.map((item, index) => ({
                   id: index,
-                  value: item.quantity * 100,
+                  value: item.amount * 100,
                   label: item.symbol,
                 })),
                 valueFormatter: (v) => {
@@ -163,7 +169,7 @@ export default function AIButton() {
             <Button
               variant="contained"
               color="secondary"
-              // onClick={handleApply}
+              onClick={handleApply}
               sx={{ marginRight: '10px' }} // Add some margin between the buttons
             >
               Apply
