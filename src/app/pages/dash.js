@@ -7,41 +7,57 @@ import ProfolioPie from "../components/profolioPie";
 import ReturnChart from "../components/returnChart";
 import AIButton from "../components/aiButton";
 
-const pieChartData = [
-  { "symbol": "IBM", "price": 180 },
-  { "symbol": "AAPL", "price": 150 },
-  { "symbol": "GOOGL", "price": 2800 },
-  { "symbol": "AMZN", "price": 3400 },
-  { "symbol": "TSLA", "price": 700 },
-  { "symbol": "MSFT", "price": 300 },
-  { "symbol": "FB", "price": 350 },
-  { "symbol": "NVDA", "price": 200 },
-  { "symbol": "NFLX", "price": 600 },
-  { "symbol": "INTC", "price": 50 }
-];
-
-const lineChartData = [];
+let pieChartData = [];
+let lineChartData = [];
 
 export default function Dash() {
   const [result, setResult] = useState("");
 
+  const csv = [
+    { symbol: "SPDR", amount: 0.5 },
+    { symbol: "VWO", amount: 0.2 },
+    { symbol: "10 year bonds", amount: 0.2 },
+    { symbol: "NVDA", amount: 0.05 },
+    { symbol: "AAPL", amount: 0.05 },
+    { symbol: "IBM", amount: 0.05 },
+  ];
+
   const monthlyInfo = async (company) => {
-    const response = await time_series_monthly("IBM"); // Call the function
-    //console.log(response);
-    setResult(response["Monthly Time Series"]); // Store the result in state
-    console.log(result);
-    populate(result);
+    pieChartData = [];
+    lineChartData = [];
+
+    for (var i = 0; i < company.length; i++) {
+      pieChartData.push({ id: i, value: 0, label: "" });
+    }
+
+    for (var i = 0; i < company.length; i++) {
+      const response = await time_series_monthly(company[i].symbol); // Call the function
+      setResult(response["Monthly Time Series"]); // Store the result in state
+      populate(result, company[i].symbol, company[i].amount, i);
+    }
   };
 
-  const populate = (result) => {
-    console.log(result);
+  const populate = (result, symbol, amount, i) => {
+    var j = 0;
     for (const dateSt in result) {
       const closeValue = result[dateSt]["4. close"];
-      console.log(dateSt);
-      console.log(closeValue);
-      lineChartData.push({ date: dateSt, returnRate: parseFloat(closeValue) });
-      //change 100 to actual value
-      pieChartData[0] = { id: 0, value: closeValue * 100, label: "IBM" };
+
+      if (j == 0) {
+        pieChartData[i].value = parseFloat(closeValue * amount);
+        pieChartData[i].label = symbol;
+      }
+
+      // if the dates have not yet been set, we first set dates
+      if (i == 0) {
+        lineChartData.push({
+          date: dateSt,
+          returnRate: parseFloat(closeValue * amount),
+        });
+      } else {
+        lineChartData[j].returnRate += parseFloat(closeValue * amount);
+      }
+
+      j++;
     }
   };
 
@@ -49,16 +65,24 @@ export default function Dash() {
     
     <Box sx={{ display: "flex", height: "100vh", padding: 2 }}>
       {/* Left Panel */}
-      <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-      
+      <Box
+        sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        {/* Search Box */}
+        <TextField label="Search" variant="outlined" fullWidth />
+
         <AIButton />
+        <button onClick={() => monthlyInfo(csv)}>Button</button>
+
         {/* Pie Chart */}
         <Box sx={{ padding: 2, flexGrow: 1 }}>
           <ProfolioPie data={pieChartData} />
         </Box>
       </Box>
       {/* Right Panel */}
-      <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Box
+        sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 2 }}
+      >
         {/* Return Chart */}
         <Box sx={{ padding: 2 }}>
           <ReturnChart data={lineChartData} />
@@ -69,12 +93,8 @@ export default function Dash() {
           <Typography variant="h6" gutterBottom>
             Risk and Rating
           </Typography>
-          <Typography variant="body1">
-            Risk Level: Medium
-          </Typography>
-          <Typography variant="body1">
-            Rating: 4.5/5
-          </Typography>
+          <Typography variant="body1">Risk Level: Medium</Typography>
+          <Typography variant="body1">Rating: 4.5/5</Typography>
         </Box>
       </Box>
     </Box>
