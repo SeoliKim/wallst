@@ -10,10 +10,11 @@ import AIButton from "../components/aiButton";
 let pieChartData = [];
 let lineChartData = [];
 
-export default function Dash() {
+export default function Dash({ csv}) {
+  console.log(csv);
   const [result, setResult] = useState("");
 
-  const csv = [
+  const csv2 = [
     { symbol: "SPDR", amount: 0.5 },
     { symbol: "VWO", amount: 0.2 },
     { symbol: "10 year bonds", amount: 0.2 },
@@ -62,39 +63,74 @@ export default function Dash() {
   };
 
   return (
-    
-    <Box sx={{ display: "flex", height: "100vh", padding: 2 }}>
-      {/* Left Panel */}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        width: "100%",
+      }}
+    >
+      {/* AI Button Row */}
       <Box
-        sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 2 }}
+        sx={{
+          marginTop: 2,
+          width: "100%",
+          height: "100px", // Set a fixed height for the AI button row
+          display: "flex",
+        }}
       >
-        {/* Search Box */}
-        <TextField label="Search" variant="outlined" fullWidth />
-
+        <button onClick={() => monthlyInfo(csv2)}>Button</button>
         <AIButton />
-        <button onClick={() => monthlyInfo(csv)}>Button</button>
-
-        {/* Pie Chart */}
-        <Box sx={{ padding: 2, flexGrow: 1 }}>
-          <ProfolioPie data={pieChartData} />
-        </Box>
+        
       </Box>
-      {/* Right Panel */}
+
+      {/* Panels Row */}
       <Box
-        sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 2 }}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          flexGrow: 1, // This will make the panels grow to fill the remaining space
+          width: "100%",
+        }}
       >
-        {/* Return Chart */}
-        <Box sx={{ padding: 2 }}>
-          <ReturnChart data={lineChartData} />
+        {/* Left Panel */}
+        <Box
+          sx={{
+            width: "50%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            padding: 2,
+          }}
+        >
+
+          {/* Pie Chart */}
+          <Box sx={{ flexGrow: 1 }}>
+            <ProfolioPie data={pieChartData} />
+          </Box>
+
+          {/* Search Box
+          <TextField label="Search" variant="outlined" fullWidth /> */}
         </Box>
 
-        {/* Risk and Rating Section */}
-        <Box sx={{ padding: 2, flexGrow: 1 }}>
-          <Typography variant="h6" gutterBottom>
-            Risk and Rating
-          </Typography>
-          <Typography variant="body1">Risk Level: Medium</Typography>
-          <Typography variant="body1">Rating: 4.5/5</Typography>
+        {/* Right Panel */}
+        <Box
+          sx={{
+            width: "50%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            padding: 2,
+            justifyContent: "center", // Center vertically
+            alignItems: "center", // Center horizontally
+            marginLeft: 5, // Add some space between the
+          }}
+        >
+          {/* Return Chart */}
+          <Box sx={{ width: "100%", flexGrow: 1, marginTop: 2 }}>
+            <ReturnChart data={lineChartData} />
+          </Box>
         </Box>
       </Box>
     </Box>

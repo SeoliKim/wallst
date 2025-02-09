@@ -4,10 +4,15 @@ import Import from "./pages/import"; // Importing the Import component
 import Dash from "./pages/dash"; // Importing the Dash component
 import SubmittedFile from "./components/submittedFile"; // Importing the SubmittedFile component
 import { Button } from "@mui/material"; // Import Material UI Button
+import { ThemeProvider } from '@mui/material/styles';
+import theme from "./theme";
+import Image from "next/image";
+import { Box } from "@mui/system";
 
 export default function Home() {
-  const [isPageOneVisible, setPageOneVisible] = useState(true); 
+  const [isPageOneVisible, setPageOneVisible] = useState(true);
   const [file, setFile] = useState(false); // State to track the selected file
+  const [extractedData, setExtractedData] = useState([]);
 
   // Function to switch pages, only if a file is uploaded
   const switchPage = () => {
@@ -19,41 +24,96 @@ export default function Home() {
   };
 
   return (
-    <div>
-      {/* Page 1 */}
-      {isPageOneVisible && (
-        <div>
-          {/* Pass the `file` state and `setFile` function to the Import component */}
-          <Import file={file} setFile={setFile} />
-          
-          {/* Disable the submit button if no file is uploaded */}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={switchPage}
-            disabled={!file}
-            sx={{
-              margin: 20,
-              padding: "10px 20px",
-              fontSize: "16px",
-              fontWeight: "bold",
-              textTransform: "none",
-              '&:hover': {
-                backgroundColor: file ? '#1565c0' : '#ccc', // Darker blue on hover if file is selected, gray if disabled
-              },
-            }}
-          >
-            Submit
-          </Button>
+    <ThemeProvider theme={theme}>
+      <Image
+        src="/wall.jpg"
+        alt="Background Image"
+        layout="fill"
+        objectFit="cover"
+        quality={100}
+        style={{
+          zIndex: -1, // Ensure the image is behind the content
+        }}
+      />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "90vh",
+          margin: 5,
+          padding: 5,
+          backgroundColor: "rgba(251, 234, 211, 0.98)"
+        }}
+      >
+        <div style={{ width: '200px', height: '40px', position: 'relative' }}>
+          <Image
+            src="/logo.png"
+            alt="logo"
+            width={175}
+            height={37}
+          />
         </div>
-      )}
 
-      {/* Page 2 */}
-      {!isPageOneVisible && (
-        <div>
-          <Dash /> {/* Dash component will be shown once file is uploaded */}
-        </div>
-      )}
-    </div>
+        {/* Main Content */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}>
+          {/* Page 1 */}
+          {isPageOneVisible && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                {/* Pass the `file` state and `setFile` function to the Import component */}
+                <Import file={file} setFile={setFile} setExtractedData={setExtractedData}/>
+                {file &&
+                  <Button
+                    variant="contained"
+                    onClick={switchPage}
+                    disabled={!file}
+                    sx={{
+                      marginTop: "30px",
+                      padding: "10px 20px",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Submit
+                  </Button>
+                }
+
+              </Box>
+            </Box>
+          )}
+
+          {/* Page 2 */}
+          {!isPageOneVisible && (
+            
+              <Dash csv={extractedData}/> 
+          )}
+        </Box>
+
+
+      </Box>
+    </ThemeProvider>
   );
 }

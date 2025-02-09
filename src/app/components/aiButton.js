@@ -13,6 +13,9 @@ import {
 } from '@mui/material';
 import { PieChart } from '@mui/x-charts';
 import { gptAPI } from '../utils/gptAPI';
+import Paper from '@mui/material/Paper';
+
+const pallete = ['#f2ce8b', '#e5c697', '#d9bea2', '#cbb7ac', '#bcb0b7', '#aca8c1', '#9ba1cb', '#879ad4', '#6f94de']
 
 export default function AIButton() {
   // State for form inputs
@@ -38,7 +41,18 @@ export default function AIButton() {
 
       // Call the API (replace `gptAPI` with your actual API call)
       const result = await gptAPI(risk, parsedInterval, focus);
-      const dataArray = JSON.parse(result);
+      console.log(result);
+
+      // Find the index of the first '[' and the last ']'
+      const startIndex = result.indexOf('[');
+      const endIndex = result.lastIndexOf(']');
+
+      // Extract the substring between the first '[' and the last ']'
+      const cleanedJson = result.slice(startIndex, endIndex + 1);
+
+      console.log("cleanedJson", cleanedJson);
+
+      const dataArray = JSON.parse(cleanedJson);
       setResponse(dataArray);
     } catch (err) {
       setError(err.message || 'An error occurred');
@@ -47,20 +61,14 @@ export default function AIButton() {
     }
   };
 
+  const handleCancel = () => {
+    setResponse(null);
+  };
+
 
   return (
-    <Box sx={{ padding: '20px', maxWidth: 400, margin: 0 }}>
+    <Box sx={{ padding: '20px', maxWidth: 800, margin: 0 }}>
       <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-        {/* Submit Button */}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleClick}
-          disabled={loading}
-          sx={{ height: '56px', minWidth: '120px', flexShrink: 0 }}
-        >
-          {loading ? <CircularProgress size={24} /> : 'Get Recommendation'}
-        </Button>
 
         {/* Risk Select */}
         <FormControl sx={{ minWidth: '120px' }}>
@@ -79,15 +87,15 @@ export default function AIButton() {
 
         {/* Interval Input */}
         <TextField
-          label="Interval"
+          label="Hold Time (years)"
           type="number"
           value={interval}
           onChange={(e) => setInterval(e.target.value)}
-          sx={{ minWidth: '100px' }}
+          sx={{ minWidth: '130px' }}
         />
 
         {/* Focus Select */}
-        <FormControl sx={{ flexGrow: 1, minWidth: '200px' }}>
+        <FormControl sx={{ flexGrow: 1, minWidth: '400px' }}>
           <InputLabel id="focus-label">Focus</InputLabel>
           <Select
             labelId="focus-label"
@@ -95,17 +103,41 @@ export default function AIButton() {
             label="Focus"
             onChange={(e) => setFocus(e.target.value)}
           >
-            <MenuItem value="tech">Tech</MenuItem>
+            <MenuItem value="tech">AI/Tech</MenuItem>
             <MenuItem value="international market">International Market</MenuItem>
-            <MenuItem value="popular trend">Popular Trend</MenuItem>
+            <MenuItem value="energy">Energy</MenuItem>
+            <MenuItem value="High risk, high profit">High risk, high profit</MenuItem>
+            <MenuItem value="Popular trend">Popular trend</MenuItem>
+            <MenuItem value="">Nothing in Particular</MenuItem>
           </Select>
         </FormControl>
 
+        {/* Submit Button */}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClick}
+          disabled={loading}
+          sx={{ height: '56px', minWidth: '120px', flexShrink: 0 }}
+        >
+          {loading ? <CircularProgress size={24} /> : 'Get Recommendation'}
+        </Button>
 
       </Box>
       {/* Display Response */}
       {response && (
-        <Box sx={{ marginTop: '20px' }}>
+        <Paper
+          sx={{
+            marginLeft: '670px',
+            marginTop: '20px',
+            padding: '20px',
+            zIndex: '1000',
+            position: 'relative',
+            backgroundColor: "rgba(251, 234, 211)",
+            borderRadius: '10px',
+            border: '1px solid black',
+            width: '400px',
+          }}>
           <Typography variant="h6" sx={{ marginBottom: '10px' }}>
             <strong>Recommendation:</strong>
           </Typography>
@@ -117,11 +149,15 @@ export default function AIButton() {
                   value: item.quantity * 100,
                   label: item.symbol,
                 })),
+                valueFormatter: (v) => {
+                  return `has ${v.value}% `;
+                },
               },
             ]}
             slotProps={{ legend: { hidden: true } }}
             width={400}
             height={200}
+            colors={pallete}
           />
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
             <Button
@@ -135,12 +171,12 @@ export default function AIButton() {
             <Button
               variant="outlined"
               color="primary"
-            // onClick={handleCancel}
+              onClick={handleCancel}
             >
               Cancel
             </Button>
           </Box>
-        </Box>
+        </Paper>
       )}
 
       {/* Display Error */}

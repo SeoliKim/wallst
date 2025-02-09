@@ -4,9 +4,9 @@ import Papa from "papaparse";
 import { Button, Typography, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box } from "@mui/material";
 import CSVDownload from "../components/template"; // Assuming CSVDownload is a component you are using to download CSVs
 
-const CSVImport = ({ file, setFile }) => {
+const CSVImport = ({ file, setFile , setExtractedData}) => {
     const [csvData, setCsvData] = useState(null);
-    const [extractedData, setExtractedData] = useState([]); // This will store the filtered data (e.g., name and city)
+    // const [extractedData, setExtractedData] = useState([]); // This will store the filtered data (e.g., name and city)
     // Mapping possible variations of column names to a standard name
     const columnMapping = {
       "Qty (Quantity)": "Quantity",
@@ -117,19 +117,20 @@ const CSVImport = ({ file, setFile }) => {
 
   return (
     <Container maxWidth="md" sx={{ marginTop: 5 }}>
-      <Paper sx={{ padding: 3 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <Typography variant="h5" gutterBottom>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+          <Typography variant="h5" gutterBottom sx={{paddingTop: 1}}>
             Import Your Investment Portfolio as a CSV:
           </Typography>
+          <Box>
           <CSVDownload />
+          </Box>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 4 }}>
           <Button
             variant="contained"
             component="label"
             sx={{
-              backgroundColor: "#1976d2",
+              backgroundColor: "#73586d",
               color: 'white',
               padding: "10px 20px",
               '&:hover': { backgroundColor: '#1565c0' },
@@ -143,7 +144,7 @@ const CSVImport = ({ file, setFile }) => {
               hidden
             />
           </Button>
-          <Typography variant="body2" sx={{ marginTop: 2, color: "#888" }}>
+          <Typography variant="body2" sx={{ marginTop: 2, color: "#A9A9A9" }}>
             Upload a CSV file containing your portfolio data. The file should have a header row.
           </Typography>
         </Box>
@@ -153,7 +154,6 @@ const CSVImport = ({ file, setFile }) => {
           {renderTable()}
         </div>
 
-      </Paper>
     </Container>
   );
 };

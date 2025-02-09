@@ -45,7 +45,7 @@ export const gptAPI = async (risk, interval, notes) => {
             { "symbol": "AI", "quantity": 0.05 },
             { "symbol": "XLK", "quantity": 0.05 }
           ]
-            Only output the JSON array. Do not include any other text or explanation.`
+            Only output the JSON string. Do not include any other text or explanation.`
         },
       ],
       max_tokens: 500,
