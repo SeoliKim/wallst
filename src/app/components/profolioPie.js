@@ -41,7 +41,7 @@ export default function ProfolioPie({csv}) {
             legend: {
               direction: 'column',
               position: { vertical: 'middle', horizontal: 'right' },
-              padding: -20,
+              padding: -5,
             },
           }}
         />
