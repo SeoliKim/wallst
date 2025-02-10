@@ -32,14 +32,14 @@ WALLST ensures that all user data remains confidential and secure. No data is st
 
 
 ### Portfolio Review
-- *Portfolio Visualization*: The personal profoloio is visualized in a pie chart provides a clear breakdown of your portfolio's asset allocation, illustrating the distribution across various asset classes.
+- *Portfolio Visualization*: The personal portfolio is visualized in a pie chart provides a clear breakdown of your portfolio's asset allocation, illustrating the distribution across various asset classes.
   - Hover over each section to see the percentage of your portfolio that each investment makes up
 - *Monitor return rate*: A dynamic line chart displays the historical price and corresponding return rate of your investments over time, enabling users to assess risk and return trends.
 
 ### AI Recommendations
 - *Tailored Insights*: WALLST utilizes advanced AI models to generate personalized investment recommendations based on user-defined parameters.
 - *Customizable Preferences*: Users can adjust recommendations by specifying their risk tolerance, investment focus, and holding period to align with their financial goals.
-- *Immediate Evluation*: Users can apply AI-recommended adjustments to their portfolio and immediately visualize the potential performance of the updated allocation.
+- *Immediate Evaluation*: Users can apply AI-recommended adjustments to their portfolio and immediately visualize the potential performance of the updated allocation.
 
 
 ## Technologies Used:
@@ -49,5 +49,5 @@ WALLST ensures that all user data remains confidential and secure. No data is st
 - AI Integration: OpenAI 
 - API: Alpha Vantage, csv-parser
 
-### Disclamer
-the information provided by WALLST is for informational purposes only and does not constitute financial advice. Always consult with a licensed financial professional before making investment decisions.
+### Disclaimer
+The information provided by WALLST is for informational purposes only and does not constitute financial advice. Always consult with a licensed financial professional before making investment decisions.
