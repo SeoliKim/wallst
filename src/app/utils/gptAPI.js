@@ -26,7 +26,7 @@ export const gptAPI = async (csv, risk, interval, notes) => {
           Ensure the following restrictions are applied:
             1. The total percentage allocation must add up to exactly 1 (100%).
             2. Adjustments should align with the stated goal of a ${interval} interval and ${risk} risk profile, including ${notes}.
-            3. Make 2 changes to the existing assets and add 3 new assets to the portfolio, no bonds.
+            3. The portfolio should be diversified and robust against market fluctuations.
 
 
           Example Output:
